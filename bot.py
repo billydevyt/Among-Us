@@ -10,7 +10,6 @@ client = commands.Bot(command_prefix=config.prefix)
 # loading extensions
 client.load_extension('cogs.amongus')
 client.load_extension('cogs.bot')
-client.load_extension('jishaku')
 
 @client.event
 async def on_ready():

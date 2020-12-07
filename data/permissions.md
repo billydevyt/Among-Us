@@ -1,0 +1,5 @@
+- View Channels
+- Send messages
+- Add reactions
+- use embed links
+- attach files
