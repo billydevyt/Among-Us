@@ -37,10 +37,6 @@ emojis = {
     "Blue": "🔵"
 }
 
-#configuration
-server_id = config.server_id
-
-
 # getting a quick embed!
 def get_embed(_title, _description, _color):
     return discord.Embed(title=_title, description=_description, color=_color)
@@ -56,10 +52,9 @@ class AmongUs(commands.Cog):
     """
     def __init__(self, bot):
         self.bot = bot
-        self.home_server = server_id
 
     @commands.command(name="AmongUs", aliases=['Among_Us', 'among_us', 'amongus', 'Amongus'])
-    @commands.cooldown(rate=1, per=120, type=BucketType.user)
+    @commands.cooldown(rate=1, per=60, type=BucketType.user)
     async def among_us(self, ctx):
         """
         - Reactions based 'Among US' game with programming languages as imposters and crewmates.
@@ -72,7 +67,6 @@ class AmongUs(commands.Cog):
         cached_messages = []
 
         await ctx.trigger_typing()
-        guild = discord.utils.get(self.bot.guilds, id=self.home_server)
 
         async def _send(e: discord.Embed):
             # sending the message
@@ -89,8 +83,8 @@ class AmongUs(commands.Cog):
         # conversation. color=randint(0, 0xFFFFFF)
         for item, value in emojis.items():
             await ctx.trigger_typing()
-            await asyncio.sleep(random.randrange(1, 5))
-            embed = get_embed('{0} {1}'.format(await guild.fetch_emoji(value), item), get_message(item), _color=RandomColour())
+            await asyncio.sleep(random.randrange(1, 4))
+            embed = get_embed('{0} {1}'.format(value, item), get_message(item), _color=RandomColour())
             _msg = await _send(embed)
 
             # for cleaning purposes
@@ -117,18 +111,16 @@ class AmongUs(commands.Cog):
 
         # adding choices
         try:
-            # this will be successfull if your server has these emojis
             for emoji in emojis.values():
-                await msg.add_reaction(await guild.fetch_emoji(emoji))
+                await msg.add_reaction(emoji)
         except:
-            # you need to assign emoji IDs in ./data/emojis.json
-            ctx.send("I think i'm missing `external emojis` permissions")
+            ctx.send("am i missing permissions?")
             return
         
         # a simple check, whether reacted emoji is in given choices.
         def check(reaction, user):
-            self.reacted = reaction.emoji.id
-            return user == ctx.author and str(reaction.emoji.id) in emojis.values()
+            self.reacted = reaction.emoji
+            return user == ctx.author and str(reaction.emoji) in emojis.values()
 
         # waiting for the reaction to proceed
         try:
@@ -154,7 +146,7 @@ class AmongUs(commands.Cog):
             else:
                 for key, value in emojis.items():
                     if value == str(self.reacted):
-                        description = "It wasn't poor **{0}**...\nThe Imposter was **{1}**".format(key, imposter)
+                        description = "It wasn't poor **{0}**...\nThe Imposter was **{1}**😈".format(key, imposter)
                         embed = get_embed("Defeat", description, discord.Color.red())
                         embed.set_image(url="https://i.ibb.co/tY6HTR8/image.png")
                         
@@ -164,10 +156,15 @@ class AmongUs(commands.Cog):
         # cleaning up trash
         for m in cached_messages:
             await m.delete()
+    
     @among_us.error
     async def among_us_error(self, ctx, error):
-        
-
+        if isinstance(error, commands.CommandOnCooldown):
+            await ctx.send("whoa chills, cooldown for one minute...")
+        elif isinstance(error, commands.BotMissingPermissions):
+            await ctx.send("oops, i'm missing some permissions which are essential for me to get this game working.")
+        else:
+            print(error)
 
 def setup(bot):
     bot.add_cog(AmongUs(bot))
