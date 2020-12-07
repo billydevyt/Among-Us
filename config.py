@@ -1,5 +1,5 @@
 # your bot's token
-token = "NzgzOTc5MDY4ODQwMDgzNDc2.X8inZw.KATa0qZV16-3H-2a8k-DqgNaPq4"                   # token
+token = "token"                   # token
 
 # your bot's prefix
 prefix = ","                   # any
