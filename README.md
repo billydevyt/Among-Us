@@ -44,7 +44,7 @@ prefix = ','
 
 ## What is new?
 <p>
-<img alt="Release" src=https://img.shields.io/github/v/release/billydevyt/Among-Us?style=flat-square>
+<img alt="Release" src="https://img.shields.io/github/v/release/billydevyt/Among-Us?style=for-the-badge">
 </p>
 
 - additional basic bot commands added.
