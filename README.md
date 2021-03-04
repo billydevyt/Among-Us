@@ -63,7 +63,7 @@ In general we follow the standard [PEP 8](https://pep8.org/#naming-conventions).
 
 ## Visit
 
-Visit us here: https://billy-s-basement.github.io
+Visit: https://billyeatcookies.vercel.app
 
 ## About
 
